@@ -10,12 +10,13 @@ public class MerchantOrdPanel:BasePanel
     {
         ClosePanel(UIConst.MercOderPanel);
     }
+
     [Header("UI配置")]
-    public Transform orderListParent; // UI列表容器（建议使用Vertical Layout Group）
+    public Transform orderListParent; // 订单UI列表容器（建议使用Vertical Layout Group）
     public GameObject orderItemPrefab; // 订单项预制件
 
     [Header("数据")]
-    public List<Order> visibleOrders = new List<Order>();
+    public List<Order> visibleOrders = new List<Order>();// 显示在面板上的订单列表
 
     void OnEnable()
     {
@@ -56,12 +57,7 @@ public class MerchantOrdPanel:BasePanel
        
         GameObject item = Instantiate(orderItemPrefab, orderListParent);
         OrderUIItem uiItem = item.GetComponent<OrderUIItem>();
-
-        uiItem.Initialize(order, () =>
-        {
-            // 接单按钮回调
-            OrderManager.Instance.AcceptOrder(order.orderID);
-        });
+        uiItem.Initialize(order);
     }
 
     // 订单更新事件处理
@@ -71,10 +67,10 @@ public class MerchantOrdPanel:BasePanel
         // 查找对应UI项更新状态
         foreach (Transform child in orderListParent)
         {
-            OrderUIItem item = child.GetComponent<OrderUIItem>();
-            if (item.OrderID == updatedOrder.orderID)
+            OrderUIItem uiItem = child.GetComponent<OrderUIItem>();
+            if (uiItem.OrderID == updatedOrder.orderID)
             {
-                item.UpdateStatus(updatedOrder.status);
+                uiItem.UpdateOrderStatus(updatedOrder.status);//更新该UI项状态
                 break;
             }
         }

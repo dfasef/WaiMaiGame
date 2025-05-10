@@ -21,20 +21,21 @@ public class Rider : MonoBehaviour
     [SerializeField] private float wanderRadius = 10f; // 闲逛半径
     public IAstarAI ai; // A星接口
     private Vector2 initialPosition;
-    private Seeker seeker;
+    
 
     [Header("订单管理")]
-    private Order currentOrder;
-   
+    public Order currentOrder;
+    public System.Action<Rider> OnStateChanged;
+    [Header("骑手属性")]
+    public int riderID;//骑手ID
+
 
     void Start()
     {
         // 获取A星组件
          ai = GetComponent<AIPath>();
         initialPosition = transform.position;
-        SetRandomDestination();
-       
-
+        SetRandomDestination();//随机生成闲逛目的地
     }
     
 
@@ -59,6 +60,9 @@ public class Rider : MonoBehaviour
         currentOrder.status = Order.OrderStatus.Accepted;
         riderState = RiderState.work;
         StartCoroutine(ExecuteDelivery());
+        // 通知订单变更
+        OrderManager.Instance.NotifyOrderUpdate(currentOrder);
+        OnStateChanged?.Invoke(this);
     }
    
 
@@ -80,11 +84,11 @@ public class Rider : MonoBehaviour
 
         // 完成订单并转换状态
         currentOrder.status = Order.OrderStatus.Completed;
-        //OrderManager.Instance.CompleteOrder(currentOrder);
+        OrderManager.Instance.CompleteOrder(currentOrder);
         TransitionToWaitingOrder();
        
     }
-    public void SetMercPositin(Vector2 target)
+    public void SetMercPositin(Vector2 target)//设置商家位置
     {
         ai.destination = target;
         ai.SearchPath();
@@ -100,12 +104,7 @@ public class Rider : MonoBehaviour
     }
     void WaitingOrderUpdate()
     {
-        //if (Input.GetKeyDown(KeyCode.K))
-        //{
-        //    AssignOrder(OrderManager.Instance.activeOrders[0]);
-        //    TransitionToWork();
-        //}
-           
+        
         // 持续检测是否到达当前目标点
         if (ai.reachedEndOfPath)
         {
@@ -131,36 +130,20 @@ public class Rider : MonoBehaviour
 
         }
     }
-    void PickUpFoodUpdate()
-    {
-
-    }
-    void DeliverFoodUpdate()
-    {
-
-    }
-
-
-    //protected virtual void EnableUpdate()
-    //{
-
-    //}
+   
     void TransitionToRest()
     {
         riderState = RiderState.Rest;
-        GetComponent<Animator>().enabled = false;
-
-        GetComponent<Collider2D>().enabled = false;
+        OnStateChanged?.Invoke(this);
     }
     public void TransitionToWaitingOrder()
     {
         riderState = RiderState.WaitingOrder;
-        GetComponent<Animator>().enabled = true;
-
-        GetComponent<Collider2D>().enabled = true;
+        OnStateChanged?.Invoke(this);
     }
     void TransitionToWork()
     {
         riderState = RiderState.work;
+        OnStateChanged?.Invoke(this);
     }
 }

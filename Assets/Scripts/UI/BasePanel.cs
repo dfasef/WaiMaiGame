@@ -4,25 +4,18 @@ using UnityEngine;
 
 public class BasePanel : MonoBehaviour
 {
-    protected bool isRemove = false;
-    protected new  string name;
+    private string panelName;
 
     public virtual void OpenPanel(string name)
     {
-        this.name = name;
+        panelName = name;
         gameObject.SetActive(true);
+        // 添加初始化逻辑（如数据刷新）
     }
 
     public virtual void ClosePanel(string name)
     {
-        isRemove = true;
         gameObject.SetActive(false);
-        
-
-        //移除缓存，表示界面没打开
-        if (UIManager.Instance.panelDict.ContainsKey(name))
-        {
-            UIManager.Instance.panelDict.Remove(name);
-        }
+        // 注意：不再操作 UIManager 的字典
     }
 }

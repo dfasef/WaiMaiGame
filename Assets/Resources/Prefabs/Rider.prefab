@@ -100,7 +100,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   riderState: 1
-  wanderRadius: 10
+  wanderRadius: 50
+  currentOrder: {fileID: 0}
 --- !u!114 &1242145231398512627
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -145,7 +146,7 @@ MonoBehaviour:
   radius: 0.28
   height: 2
   canMove: 1
-  maxSpeed: 1
+  maxSpeed: 0.2
   gravity: {x: 0, y: 0, z: 0}
   groundMask:
     serializedVersion: 2

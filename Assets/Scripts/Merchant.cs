@@ -8,23 +8,22 @@ public class Merchant : MonoBehaviour
 {
     [Header("订单生成数据设置")]
     // 添加订单状态跟踪和协程控制
-    private Order currentOrder;
-    private Coroutine generateOrderCoroutine;
-    // 当前持有的订单列表
-    private List<Order> activeOrders = new List<Order>();
+    private Order MerNewOrder;//新订单
+    private float distanceToCustomer; //顾客距离商家的最小距离
+    private Coroutine generateOrderCoroutine;//生成订单的协程
     //顾客位置列表
     public List<Transform> customers = new List<Transform>();
-    // 在Inspector中配置随机时间范围
+    // 在Inspector中配置随机生成订单时间范围
     public float minInterval = 3f;
     public float maxInterval = 5f;
 
-    public GameObject Message;
+    public GameObject messagePrefab;
 
 
 
     void Start()
     {
-        Message.SetActive(false);
+        messagePrefab.SetActive(false);
         // 启动自动生成订单的协程
         generateOrderCoroutine = StartCoroutine(GenerateOrderRoutine());
     }
@@ -43,8 +42,8 @@ public class Merchant : MonoBehaviour
             yield return new WaitForSeconds(Random.Range(minInterval, maxInterval));
 
             // 仅当没有未处理订单时生成新订单
-            if (currentOrder == null || currentOrder.status== Order.OrderStatus.Completed||
-                currentOrder.status == Order.OrderStatus.InProgress)
+            if (MerNewOrder == null || MerNewOrder.status== Order.OrderStatus.Completed||
+                MerNewOrder.status == Order.OrderStatus.InProgress)
             {
                 CreateNewOrder();
             }
@@ -53,28 +52,30 @@ public class Merchant : MonoBehaviour
     
     public void CreateNewOrder()
     {
+        Vector2 customerPos = GenerateRandomCustomerPos();
         // 生成新订单
-        currentOrder= new Order()
+        MerNewOrder = new Order()
         {
-            orderID = "ORD" + Random.Range(1000, 9999),
+            orderID = ""+Random.Range(1000, 9999),
             merchantPosition = transform.position,
-            CustomerPosition = GenerateRandomDeliveryPoint(),
+            CustomerPosition = customerPos,
+            distance = Vector2.Distance(transform.position, customerPos),
             status = Order.OrderStatus.Pending
         };
 
         // 添加到订单系统
-        OrderManager.Instance.AddOrder(currentOrder);
+        OrderManager.Instance.AddOrder(MerNewOrder);
 
-        Debug.Log("生成新订单"+currentOrder.orderID);
+        Debug.Log("生成新订单"+MerNewOrder.orderID);
 
-        Message.SetActive(true);
+        messagePrefab.SetActive(true);
       
     }
    
    
 
     // 生成随机顾客位置
-    private Vector2 GenerateRandomDeliveryPoint()
+    private Vector2 GenerateRandomCustomerPos()
     {
         if (customers.Count == 0) return Vector2.zero;
         int randomIndex = Random.Range(0, customers.Count);

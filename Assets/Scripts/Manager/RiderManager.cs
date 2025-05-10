@@ -4,15 +4,31 @@ using UnityEngine;
 
 public class RiderManager : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    public static RiderManager Instance { get; private set; }
+
+    public List<Rider> allRiders = new List<Rider>();
+
+    void Awake()
     {
-        
+        Instance = this;
+        FindAllRiders();
     }
 
-    // Update is called once per frame
-    void Update()
+    void FindAllRiders()
     {
-        
+        allRiders.AddRange(FindObjectsOfType<Rider>());
+    }
+
+    public List<Rider> GetAllRiders()
+    {
+
+        return allRiders;
+
+
+        //µÃµ½¿ÕÏÐÆïÊÖ
+        //return allRiders.FindAll(r =>
+        //    r.riderState == RiderState.WaitingOrder &&
+        //    r.currentOrder == null
+        //);
     }
 }
