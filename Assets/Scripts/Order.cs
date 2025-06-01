@@ -10,7 +10,7 @@ public class Order : MonoBehaviour
     public Vector2 CustomerPosition;  // 送餐地址
     public float distance;  // 与商家距离
     public OrderStatus status;
-    //public Rider rider;//接单骑手
+   
     //TODO: add时间限制
 
     public enum OrderStatus

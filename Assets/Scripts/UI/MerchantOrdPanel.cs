@@ -1,14 +1,15 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Security.Cryptography;
 using UnityEngine;
 
 
-public class MerchantOrdPanel:BasePanel
+public class MerchantOrdPanel:MonoBehaviour
 {
     //关闭订单界面,可优化为直接关闭面板
     public void CloseOrderPanel()
     {
-        ClosePanel(UIConst.MercOderPanel);
+        this.gameObject.SetActive(false);
     }
 
     [Header("UI配置")]
@@ -17,21 +18,48 @@ public class MerchantOrdPanel:BasePanel
 
     [Header("数据")]
     public List<Order> visibleOrders = new List<Order>();// 显示在面板上的订单列表
-
-    void OnEnable()
+    public string currentMerchantID; // 当前商家ID
+ 
+    public static MerchantOrdPanel Instance { get; private set; }
+   
+    void Awake()
     {
-        // 当UI激活时刷新列表
-        RefreshOrderList();
-
-        // 注册订单更新事件
-        OrderManager.Instance.OnOrderChanged += HandleOrderUpdate;
+        if (Instance != null && Instance != this)
+        {
+            Destroy(gameObject);
+        }
+        else 
+        {
+            Instance = this;
+        }
+       
     }
 
+    public GameObject MerchantOrdPanelUI;
+    
+    public void ShowMerchantOrdPanel(string merchantID)
+    {
+        Debug.Log("2");
+        currentMerchantID = merchantID;
+        // 当UI激活时刷新列表
+        RefreshOrderList();
+        // 注册订单更新事件
+        GetMerchantManager().OnOrderChanged += HandleOrderUpdate;
+    }
+
+    
+    MerOrderManager GetMerchantManager()
+    {
+        // 获取商家管理器
+        MerOrderManager merchantOrderManager = OrderManager.Instance.
+            GetMerOrderManager(currentMerchantID);
+        return merchantOrderManager;
+    }
     void OnDisable()
     {
         // 注销事件
-        if (OrderManager.Instance != null)
-            OrderManager.Instance.OnOrderChanged -= HandleOrderUpdate;
+        if (GetMerchantManager() != null)
+            GetMerchantManager().OnOrderChanged -= HandleOrderUpdate;
     }
 
     // 刷新整个订单列表
@@ -40,9 +68,8 @@ public class MerchantOrdPanel:BasePanel
         // 清空现有UI
         foreach (Transform child in orderListParent)
             Destroy(child.gameObject);
-
         // 获取所有活跃订单
-        var orders = OrderManager.Instance.GetAllOrders();
+        var orders = GetMerchantManager().GetAllOrders();
 
         // 生成新的UI项
         foreach (var order in orders)

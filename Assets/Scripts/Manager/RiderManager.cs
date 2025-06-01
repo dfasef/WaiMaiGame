@@ -6,7 +6,7 @@ public class RiderManager : MonoBehaviour
 {
     public static RiderManager Instance { get; private set; }
 
-    public List<Rider> allRiders = new List<Rider>();
+    public List<deliveryMan> allRiders = new List<deliveryMan>();
 
     void Awake()
     {
@@ -16,14 +16,13 @@ public class RiderManager : MonoBehaviour
 
     void FindAllRiders()
     {
-        allRiders.AddRange(FindObjectsOfType<Rider>());
+        allRiders.AddRange(FindObjectsOfType<deliveryMan>());
     }
 
-    public List<Rider> GetAllRiders()
+    public List<deliveryMan> GetAllRiders()
     {
 
         return allRiders;
-
 
         //µÃµ½¿ÕÏÐÆïÊÖ
         //return allRiders.FindAll(r =>

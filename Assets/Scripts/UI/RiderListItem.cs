@@ -11,10 +11,10 @@ using UnityEngine.UI;
     public Text statusText;
     public Button selectButton; // 新增按钮引用
 
-    private Rider currentRider;
-    private Action<Rider> selectCallback;
+    private deliveryMan currentRider;
+    private Action<deliveryMan> selectCallback;
 
-    public void Initialize(Rider riderData, Action<Rider> clickCallback, bool isAvailable)
+    public void Initialize(deliveryMan riderData, Action<deliveryMan> clickCallback, bool isAvailable)
     {
         currentRider = riderData;
         selectCallback = clickCallback;

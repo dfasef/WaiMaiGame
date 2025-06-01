@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using UnityEditorInternal.VersionControl;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -61,7 +60,7 @@ public class RiderSelectPanel : BasePanel
        
     }
 
-    void OnRiderSelected(Rider selectedRider)
+    void OnRiderSelected(deliveryMan selectedRider)
     {
         if (selectedRider.riderState != RiderState.WaitingOrder)
         {
@@ -71,11 +70,12 @@ public class RiderSelectPanel : BasePanel
 
         // 分配订单
         selectedRider.AssignOrder(targetOrder);
-
+        //获取商家订单管理器
+        MerOrderManager merchantOrderManager =
+            OrderManager.Instance.GetMerOrderManager(targetOrder.merchantID);
         // 更新订单状态
         targetOrder.status = Order.OrderStatus.InProgress;
-        OrderManager.Instance.NotifyOrderUpdate(targetOrder);
-
+        merchantOrderManager.NotifyOrderUpdate(targetOrder);
         // 关闭选择面板
         UIManager.Instance.ClosePanel(UIConst.RiderSelectPanel);
     }

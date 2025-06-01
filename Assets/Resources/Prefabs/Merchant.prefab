@@ -10,8 +10,6 @@ GameObject:
   m_Component:
   - component: {fileID: 326005700596909656}
   - component: {fileID: 7223016144626831532}
-  - component: {fileID: 2806986292044144553}
-  - component: {fileID: 7416356800751659501}
   m_Layer: 0
   m_Name: Merchant
   m_TagString: Untagged
@@ -87,38 +85,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &2806986292044144553
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8894817020710573181}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: af9d26b2715b44a498784024079e8bbb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  customers:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  minInterval: 3
-  maxInterval: 5
-  messagePrefab: {fileID: 1343168375096193315}
---- !u!114 &7416356800751659501
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8894817020710573181}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 15d142440fc39a448bdda6006bd23399, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  activeOrders: []
 --- !u!1001 &25301927433701937
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -204,11 +170,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 41808344418770949a79cfc024d1fb77, type: 3}
---- !u!1 &1343168375096193315 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 1367413671452752658, guid: 41808344418770949a79cfc024d1fb77, type: 3}
-  m_PrefabInstance: {fileID: 25301927433701937}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &7647668092820557050 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7671910984381433547, guid: 41808344418770949a79cfc024d1fb77, type: 3}
